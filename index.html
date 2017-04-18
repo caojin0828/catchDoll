@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	    <title>抓娃娃</title>
+	    <meta name="author" content="jin"/>
+	    <script type="text/javascript">
+			var phoneWidth = parseInt(window.screen.width);
+			var phoneScale = phoneWidth/640;
+			var ua = navigator.userAgent;
+			if (/Android (\d+\.\d+)/.test(ua)){
+			var version = parseFloat(RegExp.$1);
+				// andriod 2.3
+				if(version>2.3){
+					document.write('<meta name="viewport" content="width=640, minimum-scale = '+phoneScale+', maximum-scale = '+phoneScale+', target-densitydpi=device-dpi">');
+					// andriod 2.3以上
+				}else{
+					document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+				}
+				// 其他系统
+			} else {
+				document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi,minimal-ui">');
+			}
+			
+			window.onresize = function (){
+			}
+		</script>
+		<style type="text/css">
+			*{padding:0; margin:0;}
+			html,body{width:100%; height:100%;overflow: hidden;}
+			#mylegend{
+				max-width: 640px;
+				margin:0 auto;
+				background-image: url(img/p4_bg.jpg);
+				background-size: 100% 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="mylegend"></div>
+	</body>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?v=1"></script>
+	<script type="text/javascript" src="js/share.min.js"></script>
+	
+	<script type="text/javascript">
+		
+		var imgData = [
+				{name:"w1",path:"./img/w1.png"},  
+		        {name:"w2",path:"./img/w2.png"},  
+		        {name:"w3",path:"./img/w3.png"},
+		        {name:"w4",path:"./img/w4.png"},
+		        {name:"w5",path:"./img/w5.png"},
+		        {name:"w6",path:"./img/w6.png"},
+		        {name:"w7",path:"./img/w7.png"},
+		        {name:"w8",path:"./img/w8.png"},
+		        {name:"w9",path:"./img/w9.png"},
+		        {name:"w10",path:"./img/w10.png"},
+		        {name:"w11",path:"./img/w11.png"},
+		        {name:"w12",path:"./img/w12.png"},
+		        {name: "bg", path:"./img/p4_bg.jpg"},
+		        {name: "top_bar", path:"./img/top_bar.jpg"},
+		        {name: "top_box", path:"./img/top_box.png"},
+		        {name: "bot_bar", path:"./img/bot_bar.png"},
+		        {name: "pay_coins", path:"./img/pay_coins.png"},
+		        {name: "btn1", path:"./img/btn1.png"},
+		        {name: "btn1_dis", path:"./img/btn1_dis.png"},
+		        {name: "btn1_press", path:"./img/btn1_press.png"},
+		        {name: "btn2", path:"./img/btn2.png"},
+		        {name: "btn2_dis", path:"./img/btn2_dis.png"},
+		        {name: "btn2_press", path:"./img/btn2_press.png"},
+		        {name: "rocker_1", path:"./img/rocker_1.png"},
+		        {name: "rocker_1_dis", path:"./img/rocker_1_dis.png"},
+		        {name: "rocker_3", path:"./img/rocker_3.png"},
+		        {name: "rocker_4", path:"./img/rocker_4.png"},
+		        {name: "draw_pole", path:"./img/draw_pole.png"},
+				{name: "bearing", path:"./img/bearing.png"},
+			    {name: "left_draw", path:"./img/left_draw.png"},
+			    {name: "right_draw", path:"./img/right_draw.png"},
+			    {name: "ico1", path:"./img/ico1.png"},
+			    {name: "ico2", path:"./img/ico2.png"}
+			];
+		
+		var mainObj = new Main(imgData);
+		//初始化
+		mainObj.init();
+		
+		window.onorientationchange = function(){ 
+		  window.setTimeout(function(){
+		  	 mainObj.init(); 
+		  },500);
+		 } 
+		
+
+		//loading
+		mainObj.loading(function(progress){//打开load,progress为当前资源已加载百分比数
+			console.log(progress);
+			if(progress >= 100){
+				console.log('关闭load');
+			}
+		});
+		//开始游戏，请求后台，返回isGet,0:未命中1：命中
+		mainObj.gameStart(function(){
+			var isGet = 1;//此处为模拟数据，实际上为后台返回的数据
+			this.downWard(isGet);//执行爪子下探方法
+		});
+		//数据状态返回
+		mainObj.response(function(data){
+			console.log(data);
+			alert(data.msg);
+		});
+		//重置接口
+		mainObj.refresh(function(){
+			var bool = true;//此处为模拟数据，实际上为后台返回的数据 true：重置，false：不重置
+			this.setFresh(bool);//执行重置方法,bool为true时重置，为false时不重置
+		})
+		//投币 回调需要返回 付款是否成功，true：成功，false：失败
+		mainObj.pay(function(){
+			var success = true;
+			return success;
+		});
+	</script>
+	<script type="text/javascript">
+	eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('(1(c){1 d(a,b){2.A(a,b)}J e=d.H;e.A=1(a,b){2.B=c.Q.D.E("#")[0];2.u=z.F("u")[0];2.m=z.R("m");2.m.y="C/O";2.m.N=a+"?M="+L(2.B);2.u.K(2.m);2.w(b)};e.w=1(a){l.I(1(){l.G({k:a.x?a.x:a.k,3:a.3,r:a.s,j:1(){"1"==i a.j?h("g"):f("\\q\\n\\9\\8\\7\\6\\4")},5:1(){"1"==i a.5?h("g"):f("\\p\\o\\9\\8\\7\\6\\4")}});l.P({k:a.k,t:a.v,3:a.3,r:a.s,j:1(){"1"==i a.j?h("g"):f("\\q\\n\\9\\8\\7\\6\\4")},5:1(){"1"==i a.5?h("g"):f("\\p\\o\\9\\8\\7\\6\\4")}});l.S({k:a.k,t:a.v,3:a.3,r:a.s,j:1(){"1"==i a.j?h("g"):f("\\q\\n\\9\\8\\7\\6\\4")},5:1(){"1"==i a.5?h("g"):f("\\p\\o\\9\\8\\7\\6\\4")}});l.T({k:a.k,t:a.v,3:a.3,r:a.s,y:"",U:"",j:1(){"1"==i a.j?h("g"):f("\\q\\n\\9\\8\\7\\6\\4")},5:1(){"1"==i a.5?h("g"):f("\\p\\o\\9\\8\\7\\6\\4")}})});l.V(1(a){W.X("\\Y\\Z\\10\\11")})};c.12=d})(13);',62,66,'|function|this|link|u6570|cancel|u51fd|u8c03|u56de|u65e0||||||alert|ShareTimeline|fn|typeof|success|title|wx|script|u529f|u6d88|u53d6|u6210|imgUrl|img|desc|head|des|wxapi|sTitle|type|document|initialize|cururl|text|href|split|getElementsByTagName|onMenuShareTimeline|prototype|ready|var|appendChild|encodeURIComponent|url|src|javascript|onMenuShareAppMessage|location|createElement|onMenuShareQQ|onMenuShareWeibo|dataUrl|error|console|info|u5fae|u4fe1API|u5931|u8d25|WechatApi|window'.split('|'),0,{}))
+	var APP_URL = window.location.href;
+	var main = new Main();
+
+	var shareImgUrl = 'http://'+window.location.host+'/'+ window.location.pathname.substring(0,window.location.pathname.lastIndexOf("/"))+'/img/share_ico.jpg';
+   	/*wechat api*/
+  	new WechatApi('http://www.19ye.cn/wxapi/wechat_share_api.php',{
+		title:'爱恒美·情系于粉',
+		link:'http://sprg.19ye.cn/act01/',
+		des:'我在恒隆广场·上海与你拉开粉色情人节幕布，放肆爱！',
+		sTitle:'爱恒美·情系于粉 - 我在恒隆广场·上海与你拉开粉色情人节幕布，放肆爱！',
+		img:shareImgUrl,
+		success:function(type){
+			if(type == "ShareTimeline"){
+           		_hmt.push(['_trackEvent', 'share', 'ShareTimeline','success']);
+	       	}else{
+	        	_hmt.push(['_trackEvent', 'page', 'ShareAppMessage','success']);
+	       	}
+		},
+		cancel:function(type){
+			if(type == "ShareTimeline"){
+           		_hmt.push(['_trackEvent', 'share', 'ShareTimeline','cancel']);
+	       	}else{
+	        	_hmt.push(['_trackEvent', 'page', 'ShareAppMessage','cancel']);
+	       	}
+		}
+    });
+</script>
+</html>
